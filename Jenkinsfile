@@ -1,18 +1,21 @@
 pipeline {
     agent any
+
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/ghogrerahul/git2025.git'
+                git branch: 'master', url: 'https://github.com/ghogrerahul/git2025.git'
             }
         }
+
         stage('Build Docker Image') {
             steps {
                 sshagent(credentials: ['docker-host-ssh']) {
-                    sh 'ssh jenkins@54.227.42.119 "cd /home/jenkins/git2025 && docker build -t demo-app:latest ."'
+                    sh 'ssh jenkins@54.227.42.119 "cd /home/jenkins/sample-app && docker build -t demo-app:latest ."'
                 }
             }
         }
+
         stage('Run Docker Container') {
             steps {
                 sshagent(credentials: ['docker-host-ssh']) {
